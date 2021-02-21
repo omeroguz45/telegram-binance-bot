@@ -1,0 +1,8 @@
+[Unit]
+After=network-online.target
+
+[Service]
+ExecStart=/home/pi/Documents/telegram-binance-bot/telegram-binance-bot.sh
+
+[Install]
+WantedBy=default.target
