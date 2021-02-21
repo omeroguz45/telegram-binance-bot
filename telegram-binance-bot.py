@@ -10,13 +10,10 @@ bot_key = "1603927687:AAHgFNeR7FLIF6z9LrLqSEonWX1OmPH-TNg"
 
 def main():
     client = Client(api_key, api_secret)
-
     info = client.get_account()
 
     balance_BTC = float(client.get_asset_balance(asset='BTC')['free'])
     balance_BNB = float(client.get_asset_balance(asset='BNB')['free'])
-
-    fees = client.get_trade_fee(symbol='BTCUSDT')
 
     BTC_TRY = float(client.get_avg_price(symbol='BTCTRY')['price'])
     BNB_TRY = float(client.get_avg_price(symbol='BNBTRY')['price'])
@@ -28,15 +25,9 @@ def main():
 
     return tot_balance, delta, margin
 
-while True:
-    try:
-        tot_balance, delta, margin = main()
-    except:
-        time.sleep(1)
-    try:
-        bot = telebot.TeleBot(bot_key)
-    except:
-        time.sleep(1)
+def telegram_bot(tot_balance, delta, margin):
+    bot = telebot.TeleBot(bot_key)
+
     @bot.message_handler(commands=['start'])
     def handle_command(message):
         bot.reply_to(message, "Hello, welcome to Ömer's Binance Bot!")
@@ -54,3 +45,11 @@ while True:
         bot.reply_to(message, f"Profit: {str(round(margin, 2))}% {str(round(delta, 2))} TRY")
 
     bot.polling()
+
+while True:
+    try:
+        tot_balance, delta, margin = main()
+        telegram_bot(tot_balance, delta, margin)
+    except:
+        time.sleep(1)
+    
