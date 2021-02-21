@@ -7,7 +7,6 @@ api_key = '2ZnUznXVAsxk6xjZ89ZEHS5cuKkpiMUvhUH7SNvZg6BWCCzmgY2ijMPfpj14eufd'
 api_secret = 'uvf54i7l3gdNPouQD0HJQxNqVp99ge6mkywVTRBQIWvkJgrxWoutBYF1EWj5H7Aa'
 
 bot_key = "1603927687:AAHgFNeR7FLIF6z9LrLqSEonWX1OmPH-TNg"
-bot = telebot.TeleBot(bot_key)
 
 def main():
     client = Client(api_key, api_secret)
@@ -32,6 +31,7 @@ def main():
 while True:
     try:
         tot_balance, delta, margin = main()
+        bot = telebot.TeleBot(bot_key)
     except:
         time.sleep(1)
 
