@@ -51,5 +51,5 @@ while True:
         tot_balance, delta, margin = main()
         telegram_bot(tot_balance, delta, margin)
     except:
-        time.sleep(1)
+        time.sleep(5)
     
