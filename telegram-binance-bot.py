@@ -31,10 +31,12 @@ def main():
 while True:
     try:
         tot_balance, delta, margin = main()
+    except:
+        time.sleep(1)
+    try:
         bot = telebot.TeleBot(bot_key)
     except:
         time.sleep(1)
-
     @bot.message_handler(commands=['start'])
     def handle_command(message):
         bot.reply_to(message, "Hello, welcome to Ömer's Binance Bot!")
