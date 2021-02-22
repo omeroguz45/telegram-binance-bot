@@ -5,7 +5,7 @@ import telebot
 import yaml
 
 def key_init():
-    with open('keys.yaml', 'r') as f:
+    with open('./keys.yaml', 'r') as f:
         KEYS = yaml.load(f, Loader=yaml.FullLoader)
     
     return KEYS
