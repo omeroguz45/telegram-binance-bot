@@ -42,7 +42,10 @@ def telegram_bot(tot_balance, delta, margin):
 
     @bot.message_handler(commands=['profit'])
     def handle_command(message):
-        bot.reply_to(message, f"Profit: {str(round(margin, 2))}% {str(round(delta, 2))} TRY")
+        if delta < 0:
+            bot.reply_to(message, f"Loss: {str(round(margin, 2))}% {str(round(delta, 2))} TRY")
+        else:
+            bot.reply_to(message, f"Profit: {str(round(margin, 2))}% {str(round(delta, 2))} TRY")
 
     bot.polling()
 
@@ -50,6 +53,6 @@ while True:
     try:
         tot_balance, delta, margin = main()
         telegram_bot(tot_balance, delta, margin)
+        time.sleep(1)
     except:
-        time.sleep(5)
-    
+        time.sleep(1)
