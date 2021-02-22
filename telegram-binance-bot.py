@@ -2,14 +2,16 @@ from binance.client import Client
 import os
 import time
 import telebot
+import yaml
 
-api_key = '2ZnUznXVAsxk6xjZ89ZEHS5cuKkpiMUvhUH7SNvZg6BWCCzmgY2ijMPfpj14eufd'
-api_secret = 'uvf54i7l3gdNPouQD0HJQxNqVp99ge6mkywVTRBQIWvkJgrxWoutBYF1EWj5H7Aa'
+def key_init():
+    with open('keys.yaml', 'r') as f:
+        KEYS = yaml.load(f, Loader=yaml.FullLoader)
+    
+    return KEYS
 
-bot_key = "1603927687:AAHgFNeR7FLIF6z9LrLqSEonWX1OmPH-TNg"
-
-def main():
-    client = Client(api_key, api_secret)
+def get_wallet_balance(BINANCE_API_KEY, BINANCE_API_SECRET):
+    client = Client(BINANCE_API_KEY, BINANCE_API_SECRET)
     info = client.get_account()
 
     balance_BTC = float(client.get_asset_balance(asset='BTC')['free'])
@@ -25,8 +27,8 @@ def main():
 
     return tot_balance, delta, margin
 
-def telegram_bot(tot_balance, delta, margin):
-    bot = telebot.TeleBot(bot_key)
+def telegram_bot(TELEGRAM_BOT_KEY, tot_balance, delta, margin):
+    bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
 
     @bot.message_handler(commands=['start'])
     def handle_command(message):
@@ -49,10 +51,14 @@ def telegram_bot(tot_balance, delta, margin):
 
     bot.polling()
 
-while True:
-    try:
-        tot_balance, delta, margin = main()
-        telegram_bot(tot_balance, delta, margin)
-        time.sleep(1)
-    except:
-        time.sleep(1)
+def main():
+    KEYS = key_init()
+    while True:
+        try:
+            tot_balance, delta, margin = get_wallet_balance(KEYS['BINANCE_API_KEY'], KEYS['BINANCE_API_SECRET'])
+            telegram_bot(KEYS['TELEGRAM_BOT_KEY'], tot_balance, delta, margin)
+        except:
+            time.sleep(1)
+
+if __name__ == '__main__':
+    main()
